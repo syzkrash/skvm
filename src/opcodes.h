@@ -14,17 +14,19 @@
 //      B - push a byte
 //      P - push a pointer
 //      I - push an integer
+//      F - push a float
 // DROP - drop the last value from the stack
 // SWAP - swap the last two values on the stack
 // ROT  - rotate the last three values on the stack
 // OVER - copy the second value on the stack to the top of the stack
-#define OP_PUSHB ((op)0x10)
-#define OP_PUSHP ((op)0x11)
-#define OP_PUSHI ((op)0x12)
-#define OP_DROP  ((op)0x13)
-#define OP_SWAP  ((op)0x14)
-#define OP_ROT   ((op)0x15)
-#define OP_OVER  ((op)0x16)
+#define OP_DROP  ((op)0x10)
+#define OP_SWAP  ((op)0x11)
+#define OP_ROT   ((op)0x12)
+#define OP_OVER  ((op)0x13)
+#define OP_PUSHB ((op)0x14)
+#define OP_PUSHP ((op)0x15)
+#define OP_PUSHI ((op)0x16)
+#define OP_PUSHF ((op)0x17)
 
 // --- Memory operations ---
 // GET<T> - get a value from memory; T is the same as for PUSH
@@ -35,13 +37,15 @@
 #define OP_SETP ((op)0x23)
 #define OP_GETI ((op)0x24)
 #define OP_SETI ((op)0x25)
+#define OP_GETF ((op)0x26)
+#define OP_SETF ((op)0x27)
 
-// --- Integer & binary arithmetic ---
-// ADD  - add two integer or byte values
-// SUB  - subtract two integer or byte values
-// MUL  - multiply two integer or byte values
-// DIVM - divmod two integer or byte values, push both the division result and
-//        the remainder onto the stack
+// --- Arithmetic & binary logic ---
+// ADD  - add two numeric values
+// SUB  - subtract two numeric values
+// MUL  - multiply two numeric values
+// DIVM - divmod two numeric values, push both the division result and the
+//        remainder onto the stack
 // LSH  - bitshift left
 // RSH  - bitshift right
 // AND  - bitwise AND

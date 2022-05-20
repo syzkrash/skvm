@@ -3,11 +3,12 @@
 
 #include <stdlib.h>
 
-// value_type represents the 3 types recognized by the VM
+// value_type represents the 4 types recognized by the VM
 enum value_type {
 	v_byte, // uint8
 	v_ptr,  // uint16
 	v_int,  // int32
+	v_float // float
 };
 
 // value represents a singular value of any tuype
