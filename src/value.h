@@ -14,7 +14,7 @@ enum value_type {
 // value represents a singular value of any tuype
 struct value {
 	// type of this value
-	enum value_type type;
+	uint8_t type;
 	// data is the individual bytes of the value
 	uint8_t data[4];
 };
