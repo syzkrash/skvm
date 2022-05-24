@@ -15,6 +15,7 @@
 //      P - push a pointer
 //      I - push an integer
 //      F - push a float
+//      L - push a program pointer to a label or function
 // DROP - drop the last value from the stack
 // SWAP - swap the last two values on the stack
 // ROT  - rotate the last three values on the stack
@@ -27,6 +28,7 @@
 #define OP_PUSHP ((op)0x15)
 #define OP_PUSHI ((op)0x16)
 #define OP_PUSHF ((op)0x17)
+#define OP_PUSHL ((op)0x18)
 
 // --- Memory operations ---
 // GET<T> - get a value from memory; T is the same as for PUSH
@@ -62,6 +64,22 @@
 #define OP_OR   ((op)0x37)
 #define OP_XOR  ((op)0x38)
 #define OP_NOT  ((op)0x39)
+
+// --- Labels, functions & control flow ---
+// LABEL - define a named label in the code, the code after this opcode will
+//         continue executing
+// FUNC  - define a named function in the code, ignoring the code below until
+//         a RET instruction
+//         execute up to that exact RET instruction.
+// JUMP  - jumps to a label continues execution as per usual
+// CALL  - jumps to a function and executes up until the next RET
+// RET   - terminates a function
+#define OP_LABEL ((op)0x40)
+#define OP_FUNC  ((op)0x41)
+#define OP_JUMP  ((op)0x42)
+#define OP_CALL  ((op)0x43)
+#define OP_RET   ((op)0x44)
+#define OP_JMPIF ((op)0x4F)
 
 // --- Section definitions ---
 // DATA - defines data pieces that should be loaded into memory before the
