@@ -6,6 +6,8 @@ struct VM* vm_new(FILE* source)
 {
 	struct VM* vm = calloc(1, sizeof(struct VM));
 	vm->program = source;
+	vm->stack.vm = vm;
+	vm->callstack.vm = vm;
 	return vm;
 }
 
@@ -67,6 +69,105 @@ uint8_t vm_do_data(struct VM* vm)
 			vm->memory[addr+i] = fgetc(vm->program);
 			if(ferror(vm->program))
 				return ERR_VM_BAD_READ;
+		}
+	}
+}
+
+uint8_t vm_do_text(struct VM* vm)
+{
+	struct value tmp;
+	while(1)
+	{
+		op opcode = fgetc(vm->program);
+		if(ferror(vm->program))
+			return ERR_VM_BAD_READ;
+
+
+		switch(opcode)
+		{
+		case OP_NOOP:  break;
+		case OP_PANIC: break;
+		case OP_DROP:
+			if(vm->stack.end == 0) {
+				return ERR_VM_STACK_UNDER;
+			}
+			vm->stack.end--;
+			free(vm->stack.values[vm->stack.end].value);
+			break;
+		case OP_SWAP:
+			if(vm->stack.end < 2) {
+				return ERR_VM_STACK_UNDER;
+			}
+			tmp = vm->stack.values[vm->stack.end-2];
+			vm->stack.values[vm->stack.end-2] = vm->stack.values[vm->stack.end-1];
+			vm->stack.values[vm->stack.end-1] = tmp;
+			break;
+		case OP_ROT:
+			if(vm->stack.end < 3) {
+				return ERR_VM_STACK_UNDER;
+			}
+			tmp = vm->stack.values[vm->stack.end-3];
+			vm->stack.values[vm->stack.end-3] = vm->stack.values[vm->stack.end-2];
+			vm->stack.values[vm->stack.end-2] = vm->stack.values[vm->stack.end-1];
+			vm->stack.values[vm->stack.end-1] = tmp;
+			break;
+		case OP_OVER:
+			if(vm->stack.end < 2) {
+				return ERR_VM_STACK_UNDER;
+			}
+			if(vm->stack.end == STACK_SIZE) {
+				return ERR_VM_STACK_OVER;
+			}
+			vm->stack.values[vm->stack.end] = vm->stack.values[vm->stack.end-2];
+			vm->stack.end++;
+			break;
+		case OP_PUSHB:
+			if(vm->stack.end == STACK_SIZE) {
+				return ERR_VM_STACK_OVER;
+			}
+			uint8_t* the_byte = malloc(1);
+			*the_byte = (uint8_t)fgetc(vm->program);
+			vm->stack.values[vm->stack.end].type = v_byte;
+			vm->stack.values[vm->stack.end].value = the_byte;
+			vm->stack.end++;
+			break;
+		case OP_PUSHP:
+			if(vm->stack.end == STACK_SIZE) {
+				return ERR_VM_STACK_OVER;
+			}
+			uint8_t* the_ptr = malloc(2);
+			* the_ptr    = (uint8_t)fgetc(vm->program);
+			*(the_ptr+1) = (uint8_t)fgetc(vm->program);
+			vm->stack.values[vm->stack.end].type = v_ptr;
+			vm->stack.values[vm->stack.end].value = the_ptr;
+			vm->stack.end++;
+			break;
+		case OP_PUSHI:
+			if(vm->stack.end == STACK_SIZE) {
+				return ERR_VM_STACK_OVER;
+			}
+			uint8_t* the_int = malloc(4);
+			* the_int    = (uint8_t)fgetc(vm->program);
+			*(the_int+1) = (uint8_t)fgetc(vm->program);
+			*(the_int+2) = (uint8_t)fgetc(vm->program);
+			*(the_int+3) = (uint8_t)fgetc(vm->program);
+			vm->stack.values[vm->stack.end].type = v_int;
+			vm->stack.values[vm->stack.end].value = the_int;
+			vm->stack.end++;
+			break;
+		case OP_PUSHF:
+			if(vm->stack.end == STACK_SIZE) {
+				return ERR_VM_STACK_OVER;
+			}
+			uint8_t* the_float = malloc(4);
+			* the_float    = (uint8_t)fgetc(vm->program);
+			*(the_float+1) = (uint8_t)fgetc(vm->program);
+			*(the_float+2) = (uint8_t)fgetc(vm->program);
+			*(the_float+3) = (uint8_t)fgetc(vm->program);
+			vm->stack.values[vm->stack.end].type = v_float;
+			vm->stack.values[vm->stack.end].value = the_float;
+			vm->stack.end++;
+			break;
 		}
 	}
 }

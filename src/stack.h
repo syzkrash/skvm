@@ -8,8 +8,11 @@
 typedef uint8_t stack_ptr;
 #define STACK_SIZE UINT8_MAX
 
+struct VM;
+
 // stack represents a singular stack (all stacks have a constant size)
 struct stack {
+	struct VM* vm;
 	// end ALWAYS points at the element AFTER the last element
 	stack_ptr end;
 	// values points to the array of the stack elements
@@ -25,6 +28,8 @@ typedef uint16_t program_ptr;
 typedef uint8_t  callstack_ptr;
 #define CALLSTACK_SIZE UINT8_MAX
 
+
+
 struct call {
 	_Bool label;
 	program_ptr addr;
@@ -32,6 +37,7 @@ struct call {
 
 // callstack represents a stack of function return addresses
 struct callstack {
+	struct VM* vm;
 	callstack_ptr end;
 	struct call calls[CALLSTACK_SIZE];
 };
