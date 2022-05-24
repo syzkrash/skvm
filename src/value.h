@@ -1,7 +1,7 @@
 #ifndef VALUE_H
 #define VALUE_H
 
-#include <stdlib.h>
+#include <stdint.h>
 
 // value_type represents the 4 types recognized by the VM
 enum value_type {
@@ -15,9 +15,10 @@ enum value_type {
 struct value {
 	// type of this value
 	enum value_type type;
-	// value points to the value in memory, the size of the value pointed to is
-	// dependent on the value_type of this value
-	void* value;
+	// data is the individual bytes of the value
+	uint8_t data[4];
 };
+
+#define value2type(v, t) ((t*)&((v).data))
 
 #endif

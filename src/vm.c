@@ -52,7 +52,7 @@ uint8_t vm_do_data(struct VM* vm)
 		memory_ptr size = (size_top << 8) | size_bot;
 		// return early if size is 0: it does not make sense, use so we use it as
 		// an end-of-section marker
-		if(size == 0) break;
+		if(size == 0) return 0;
 
 		memory_ptr addr_top = fgetc(vm->program);
 		if(ferror(vm->program))
@@ -92,7 +92,6 @@ uint8_t vm_do_text(struct VM* vm)
 				return ERR_VM_STACK_UNDER;
 			}
 			vm->stack.end--;
-			free(vm->stack.values[vm->stack.end].value);
 			break;
 		case OP_SWAP:
 			if(vm->stack.end < 2) {
@@ -125,49 +124,47 @@ uint8_t vm_do_text(struct VM* vm)
 			if(vm->stack.end == STACK_SIZE) {
 				return ERR_VM_STACK_OVER;
 			}
-			uint8_t* the_byte = malloc(1);
-			*the_byte = (uint8_t)fgetc(vm->program);
 			vm->stack.values[vm->stack.end].type = v_byte;
-			vm->stack.values[vm->stack.end].value = the_byte;
+			vm->stack.values[vm->stack.end].data[0] = fgetc(vm->program);
 			vm->stack.end++;
 			break;
 		case OP_PUSHP:
 			if(vm->stack.end == STACK_SIZE) {
 				return ERR_VM_STACK_OVER;
 			}
-			uint8_t* the_ptr = malloc(2);
+			uint8_t* the_ptr = vm->stack.values[vm->stack.end].data;
 			* the_ptr    = (uint8_t)fgetc(vm->program);
 			*(the_ptr+1) = (uint8_t)fgetc(vm->program);
 			vm->stack.values[vm->stack.end].type = v_ptr;
-			vm->stack.values[vm->stack.end].value = the_ptr;
 			vm->stack.end++;
 			break;
 		case OP_PUSHI:
 			if(vm->stack.end == STACK_SIZE) {
 				return ERR_VM_STACK_OVER;
 			}
-			uint8_t* the_int = malloc(4);
+			uint8_t* the_int = vm->stack.values[vm->stack.end].data;
 			* the_int    = (uint8_t)fgetc(vm->program);
 			*(the_int+1) = (uint8_t)fgetc(vm->program);
 			*(the_int+2) = (uint8_t)fgetc(vm->program);
 			*(the_int+3) = (uint8_t)fgetc(vm->program);
 			vm->stack.values[vm->stack.end].type = v_int;
-			vm->stack.values[vm->stack.end].value = the_int;
 			vm->stack.end++;
 			break;
 		case OP_PUSHF:
 			if(vm->stack.end == STACK_SIZE) {
 				return ERR_VM_STACK_OVER;
 			}
-			uint8_t* the_float = malloc(4);
+			uint8_t* the_float = vm->stack.values[vm->stack.end].data;
 			* the_float    = (uint8_t)fgetc(vm->program);
 			*(the_float+1) = (uint8_t)fgetc(vm->program);
 			*(the_float+2) = (uint8_t)fgetc(vm->program);
 			*(the_float+3) = (uint8_t)fgetc(vm->program);
 			vm->stack.values[vm->stack.end].type = v_float;
-			vm->stack.values[vm->stack.end].value = the_float;
 			vm->stack.end++;
 			break;
+
+		case SEC_TERM:
+			return 0;
 		}
 	}
 }
