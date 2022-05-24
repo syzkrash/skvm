@@ -28,4 +28,5 @@ struct VM* vm_new(FILE*);
 //         ERR_VM_... value.
 uint8_t vm_next(struct VM*);
 
+
 #endif // VM_H
