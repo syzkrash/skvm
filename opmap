@@ -1,0 +1,80 @@
+// opmap: list of all skvm opcodes and their names
+//        used to generate src/opcodes.h (see gen_op.py)
+
+// --- General instructions ---
+// NOOP  - do nothing
+// PANIC - quit due to unexpected error
+NOOP  0x00
+PANIC 0x01
+
+// --- Stack operations ---
+// PUSH<T> - push a value onto the stack; T can be one of
+//      B - push a byte
+//      P - push a pointer
+//      I - push an integer
+//      F - push a float
+//      L - push a program pointer to a label or function
+// DROP - drop the last value from the stack
+// SWAP - swap the last two values on the stack
+// ROT  - rotate the last three values on the stack
+// OVER - copy the second value on the stack to the top of the stack
+DROP  0x10
+SWAP  0x11
+ROT   0x12
+OVER  0x13
+PUSHB 0x14
+PUSHP 0x15
+PUSHI 0x16
+PUSHF 0x17
+PUSHL 0x18
+
+// --- Memory operations ---
+// GET<T> - get a value from memory; T is the same as for PUSH
+// SET<T> - set a value in memory; T is the same here too
+GETB 0x20
+SETB 0x21
+GETP 0x22
+SETP 0x23
+GETI 0x24
+SETI 0x25
+GETF 0x26
+SETF 0x27
+
+// --- Arithmetic & binary logic ---
+// ADD  - add two numeric values
+// SUB  - subtract two numeric values
+// MUL  - multiply two numeric values
+// DIVM - divmod two numeric values, push both the division result and the
+//        remainder onto the stack
+// LSH  - bitshift left
+// RSH  - bitshift right
+// AND  - bitwise AND
+// OR   - bitwise OR
+// XOR  - bitwise XOR
+// NOT  - bitwise NOT
+ADD  0x30
+SUB  0x31
+MUL  0x32
+DIMD 0x33
+LSH  0x34
+RSH  0x35
+AND  0x36
+OR   0x37
+XOR  0x38
+NOT  0x39
+
+// --- Labels, functions & control flow ---
+// LABEL - define a named label in the code, the code after this opcode will
+//         continue executing
+// FUNC  - define a named function in the code, ignoring the code below until
+//         a RET instruction
+//         execute up to that exact RET instruction.
+// JUMP  - jumps to a label continues execution as per usual
+// CALL  - jumps to a function and executes up until the next RET
+// RET   - terminates a function
+LABEL 0x40
+FUNC  0x41
+JUMP  0x42
+CALL  0x43
+RET   0x44
+JMPIF 0x4F
