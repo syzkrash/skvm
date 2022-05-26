@@ -2,7 +2,6 @@
 #define VM_H
 
 #include "stack.h"
-#include "opcodes.h"
 #include <stdio.h>
 
 #define memory_ptr  uint16_t
