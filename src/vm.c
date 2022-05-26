@@ -16,7 +16,6 @@ struct VM* vm_new(FILE* source)
 // file-private definitions for vm_next
 uint8_t vm_do_data(struct VM* vm);
 uint8_t vm_do_text(struct VM* vm);
-#warning TODO: implement vm_do_text
 
 uint8_t vm_next(struct VM* vm)
 {

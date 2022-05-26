@@ -1,8 +1,9 @@
-// Generated with gen_op.py [2022-05-26 18:33:52.045932]
+// Generated with gen_op.py [2022-05-26 18:36:59.502158]
 // Don't edit manually
 #ifndef OPCODES_H
 #define OPCODES_H
 
+#include "vm.h"
 #include <stdint.h>
 
 typedef uint8_t op;
@@ -81,7 +82,7 @@ uint8_t op_jmpif(struct VM*);
 
 
 // get_op_func returns the function corresponding to the given opcode
-opfunc *get_op_func(op opcode)
+static opfunc *get_op_func(op opcode)
 {
   switch(opcode)
   {
