@@ -1,5 +1,6 @@
 #include "vm.h"
 #include "errors.h"
+#include "sections.h"
 #include <stdlib.h>
 
 struct VM* vm_new(FILE* source)
@@ -22,7 +23,7 @@ uint8_t vm_next(struct VM* vm)
 	// the call chain
 	if(feof(vm->program))
 		return ERR_VM_EOF;
-	uint8_t section = fgetc(vm->program);
+	sec section = fgetc(vm->program);
 	if(ferror(vm->program))
 		return ERR_VM_BAD_READ;
 
