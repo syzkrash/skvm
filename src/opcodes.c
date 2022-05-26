@@ -15,6 +15,15 @@ uint8_t op_drop(struct VM* vm)
 	vm->stack.end--;
 }
 
+uint8_t op_dup(struct VM* vm)
+{
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
+
+	vm->stack.values[vm->stack.end] = vm->stack.values[vm->stack.end-1];
+	vm->stack.end++;
+}
+
 uint8_t op_swap(struct VM* vm)
 {
 	if(vm->stack.end < 2)
