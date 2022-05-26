@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 typedef uint8_t stack_ptr;
-#define STACK_SIZE UINT8_MAX
+#define STACK_SIZE 16
 
 struct VM;
 
@@ -26,9 +26,7 @@ struct value stack_pop(struct stack*);
 
 typedef uint16_t program_ptr;
 typedef uint8_t  callstack_ptr;
-#define CALLSTACK_SIZE UINT8_MAX
-
-
+#define CALLSTACK_SIZE 32
 
 struct call {
 	_Bool label;
