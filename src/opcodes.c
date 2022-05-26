@@ -2,10 +2,14 @@
 #include "errors.h"
 
 uint8_t op_noop(struct VM* vm)
-{}
+{
+	return 0;
+}
 
 uint8_t op_panic(struct VM* vm)
-{}
+{
+	return 0;
+}
 
 uint8_t op_drop(struct VM* vm)
 {
@@ -13,6 +17,8 @@ uint8_t op_drop(struct VM* vm)
 		return ERR_VM_STACK_UNDER;
 
 	vm->stack.end--;
+
+	return 0;
 }
 
 uint8_t op_dup(struct VM* vm)
@@ -22,6 +28,8 @@ uint8_t op_dup(struct VM* vm)
 
 	vm->stack.values[vm->stack.end] = vm->stack.values[vm->stack.end-1];
 	vm->stack.end++;
+
+	return 0;
 }
 
 uint8_t op_swap(struct VM* vm)
@@ -32,6 +40,8 @@ uint8_t op_swap(struct VM* vm)
 	struct value tmp = vm->stack.values[vm->stack.end-2];
 	vm->stack.values[vm->stack.end-2] = vm->stack.values[vm->stack.end-1];
 	vm->stack.values[vm->stack.end-1] = tmp;
+
+	return 0;
 }
 
 uint8_t op_rot(struct VM* vm)
@@ -43,6 +53,8 @@ uint8_t op_rot(struct VM* vm)
 	vm->stack.values[vm->stack.end-3] = vm->stack.values[vm->stack.end-2];
 	vm->stack.values[vm->stack.end-2] = vm->stack.values[vm->stack.end-1];
 	vm->stack.values[vm->stack.end-1] = tmp;
+
+	return 0;
 }
 
 uint8_t op_over(struct VM* vm)
@@ -54,6 +66,8 @@ uint8_t op_over(struct VM* vm)
 
 	vm->stack.values[vm->stack.end] = vm->stack.values[vm->stack.end-2];
 	vm->stack.end++;
+
+	return 0;
 }
 
 uint8_t op_pushb(struct VM* vm)
@@ -66,6 +80,8 @@ uint8_t op_pushb(struct VM* vm)
 	val.data[0] = fgetc(vm->program);
 	vm->stack.values[vm->stack.end] = val;
 	vm->stack.end++;
+
+	return 0;
 }
 
 uint8_t op_pushp(struct VM* vm)
@@ -79,6 +95,8 @@ uint8_t op_pushp(struct VM* vm)
 	val.data[1] = fgetc(vm->program);
 	vm->stack.values[vm->stack.end] = val;
 	vm->stack.end++;
+
+	return 0;
 }
 
 uint8_t op_pushi(struct VM* vm)
@@ -94,6 +112,8 @@ uint8_t op_pushi(struct VM* vm)
 	val.data[3] = fgetc(vm->program);
 	vm->stack.values[vm->stack.end] = val;
 	vm->stack.end++;
+
+	return 0;
 }
 
 uint8_t op_pushf(struct VM* vm)
@@ -109,7 +129,11 @@ uint8_t op_pushf(struct VM* vm)
 	val.data[3] = fgetc(vm->program);
 	vm->stack.values[vm->stack.end] = val;
 	vm->stack.end++;
+
+	return 0;
 }
+
+#warning TODO: properly implement PUSHL after labels & functions
 
 uint8_t op_pushl(struct VM* vm)
 {
@@ -122,6 +146,8 @@ uint8_t op_pushl(struct VM* vm)
 	val.data[1] = fgetc(vm->program);
 	vm->stack.values[vm->stack.end] = val;
 	vm->stack.end++;
+
+	return 0;
 }
 
 #warning TODO: implement the rest of the opcodes
