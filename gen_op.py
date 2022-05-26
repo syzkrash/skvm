@@ -7,7 +7,7 @@ HEADER_TMPL = """
 #ifndef OPCODES_H
 #define OPCODES_H
 
-typedef op uint8_t;
+typedef uint8_t op;
 
 %s
 #endif

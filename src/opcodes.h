@@ -3,7 +3,7 @@
 #ifndef OPCODES_H
 #define OPCODES_H
 
-typedef op uint8_t;
+typedef uint8_t op;
 
 #define OP_NOOP ((op)0x00)
 #define OP_PANIC ((op)0x01)
@@ -36,7 +36,7 @@ typedef op uint8_t;
 #define OP_NOT ((op)0x39)
 #define OP_LABEL ((op)0x40)
 #define OP_FUNC ((op)0x41)
-#define OP_JUMP ((op)0x42)
+#define OP_JMP ((op)0x42)
 #define OP_CALL ((op)0x43)
 #define OP_RET ((op)0x44)
 #define OP_JMPIF ((op)0x4F)

@@ -69,12 +69,13 @@ NOT  0x39
 // FUNC  - define a named function in the code, ignoring the code below until
 //         a RET instruction
 //         execute up to that exact RET instruction.
-// JUMP  - jumps to a label continues execution as per usual
+// J MP  - jumps to a label continues execution as per usual
 // CALL  - jumps to a function and executes up until the next RET
 // RET   - terminates a function
+// JMPIF - jumps to a label if and only if the last value on the stack is not 0
 LABEL 0x40
 FUNC  0x41
-JUMP  0x42
+JMP   0x42
 CALL  0x43
 RET   0x44
 JMPIF 0x4F
