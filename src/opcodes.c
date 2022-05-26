@@ -40,6 +40,8 @@ uint8_t op_over(struct VM* vm)
 {
 	if(vm->stack.end < 2)
 		return ERR_VM_STACK_UNDER;
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
 
 	vm->stack.values[vm->stack.end] = vm->stack.values[vm->stack.end-2];
 	vm->stack.end++;
@@ -47,6 +49,9 @@ uint8_t op_over(struct VM* vm)
 
 uint8_t op_pushb(struct VM* vm)
 {
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
+
 	struct value val;
 	val.type = v_byte;
 	val.data[0] = fgetc(vm->program);
@@ -56,6 +61,9 @@ uint8_t op_pushb(struct VM* vm)
 
 uint8_t op_pushp(struct VM* vm)
 {
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
+
 	struct value val;
 	val.type = v_ptr;
 	val.data[0] = fgetc(vm->program);
@@ -66,6 +74,9 @@ uint8_t op_pushp(struct VM* vm)
 
 uint8_t op_pushi(struct VM* vm)
 {
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
+
 	struct value val;
 	val.type = v_int;
 	val.data[0] = fgetc(vm->program);
@@ -78,6 +89,9 @@ uint8_t op_pushi(struct VM* vm)
 
 uint8_t op_pushf(struct VM* vm)
 {
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
+
 	struct value val;
 	val.type = v_float;
 	val.data[0] = fgetc(vm->program);
@@ -90,6 +104,9 @@ uint8_t op_pushf(struct VM* vm)
 
 uint8_t op_pushl(struct VM* vm)
 {
+	if(vm->stack.end >= STACK_SIZE)
+		return ERR_VM_STACK_OVER;
+
 	struct value val;
 	val.type = v_ptr;
 	val.data[0] = fgetc(vm->program);
