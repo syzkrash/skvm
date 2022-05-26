@@ -150,4 +150,168 @@ uint8_t op_pushl(struct VM* vm)
 	return 0;
 }
 
+uint8_t op_getb(struct VM* vm)
+{
+	if(vm->stack.end < 1)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	uint8_t the_byte = *((uint8_t*)&vm->memory + addr);
+
+	struct value byte_value;
+	byte_value.type = v_byte;
+	*((uint8_t*)&byte_value.data) = the_byte;
+	vm->stack.values[vm->stack.end-1] = byte_value;
+
+	return 0;
+}
+
+uint8_t op_getp(struct VM* vm)
+{
+	if(vm->stack.end < 1)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	memory_ptr the_ptr = *((memory_ptr*)&vm->memory + addr);
+
+	struct value ptr_value;
+	ptr_value.type = v_ptr;
+	*((memory_ptr*)&ptr_value.data) = the_ptr;
+	vm->stack.values[vm->stack.end-1] = ptr_value;
+
+	return 0;
+}
+
+uint8_t op_geti(struct VM* vm)
+{
+	if(vm->stack.end < 1)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	int32_t the_int = *((int32_t*)&vm->memory + addr);
+
+	struct value int_value;
+	int_value.type = v_int;
+	*((int32_t*)&int_value.data) = the_int;
+	vm->stack.values[vm->stack.end-1] = int_value;
+
+	return 0;
+}
+
+uint8_t op_getf(struct VM* vm)
+{
+	if(vm->stack.end < 1)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	float the_float = *((float*)&vm->memory + addr);
+
+	struct value float_value;
+	float_value.type = v_float;
+	*((float*)&float_value.data) = the_float;
+	vm->stack.values[vm->stack.end-1] = float_value;
+
+	return 0;
+}
+
+uint8_t op_setb(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+	struct value byte_val = vm->stack.values[vm->stack.end-2];
+	if(byte_val.type != v_byte)
+		return ERR_VM_EXPCT_BYTE;
+	vm->stack.end -= 2;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	uint8_t the_byte = *((uint8_t*)&byte_val.data);
+
+	*((uint8_t*)&vm->memory + addr) = the_byte;
+
+	return 0;
+}
+
+uint8_t op_setp(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+	struct value ptr_val = vm->stack.values[vm->stack.end-2];
+	if(ptr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+	vm->stack.end -= 2;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	memory_ptr the_ptr = *((memory_ptr*)&ptr_val.data);
+
+	*((memory_ptr*)&vm->memory + addr) = the_ptr;
+
+	return 0;
+}
+
+uint8_t op_seti(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+	struct value int_val = vm->stack.values[vm->stack.end-2];
+	if(int_val.type != v_int)
+		return ERR_VM_EXPCT_INT;
+	vm->stack.end -= 2;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	int32_t the_int = *((int32_t*)&int_val.data);
+
+	*((int32_t*)&vm->memory + addr) = the_int;
+
+	return 0;
+}
+
+uint8_t op_setf(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	struct value addr_val = vm->stack.values[vm->stack.end-1];
+	if(addr_val.type != v_ptr)
+		return ERR_VM_EXPCT_PTR;
+	struct value float_val = vm->stack.values[vm->stack.end-2];
+	if(float_val.type != v_float)
+		return ERR_VM_EXPCT_FLOAT;
+	vm->stack.end -= 2;
+
+	memory_ptr addr = *((memory_ptr*)&addr_val.data);
+	float the_float = *((float*)&float_val.data);
+
+	*((float*)&vm->memory + addr) = the_float;
+
+	return 0;
+}
+
 #warning TODO: implement the rest of the opcodes

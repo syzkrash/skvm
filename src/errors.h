@@ -12,4 +12,12 @@
 #define ERR_VM_CALLS_UNDER 0x1C
 #define ERR_VM_CALLS_OVER  0x1D
 
+#define ERR_VM_OOB_WRITE   0x20
+#define ERR_VM_OOB_READ    0x21
+
+#define ERR_VM_EXPCT_BYTE  0x2A
+#define ERR_VM_EXPCT_PTR   0x21
+#define ERR_VM_EXPCT_INT   0x22
+#define ERR_VM_EXPCT_FLOAT 0x23
+
 #endif // ERRORS_H
