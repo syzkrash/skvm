@@ -1,0 +1,12 @@
+{
+	"Opcode": {
+		"description": "Opcode implementation template for opcodes.c",
+		"prefix": "op_",
+		"body": [
+			"uint8_t op_$1(struct VM* vm)",
+			"{",
+			"\t$2",
+			"}"
+		]
+	}
+}
