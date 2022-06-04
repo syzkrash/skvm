@@ -1,7 +1,8 @@
 bob 1.0
 
 filters {
-	glob-file src[/\\]**.[ch]
+	glob-file src/**.[ch]
+	glob-file src\\**.[ch]
 }
 
 replace {
@@ -10,17 +11,14 @@ replace {
 
 step Build Stack {
 	run %cc% -c src/stack.c -o bin/stack.o
-	if glob-file src[/\\]stack.[ch]
 }
 
 step Build Opcodes {
 	run %cc% -c src/opcodes.c -o bin/opcodes.o
-	if glob-file src[/\\]opcodes.[ch]
 }
 
 step Build VM {
 	run %cc% -c src/vm.c -o bin/vm.o
-	if glob-file src[/\\]vm.[ch]
 }
 
 step Build Executable {

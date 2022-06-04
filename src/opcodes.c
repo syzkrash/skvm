@@ -314,4 +314,172 @@ uint8_t op_setf(struct VM* vm)
 	return 0;
 }
 
+uint8_t op_add(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a + b;
+
+	return 0;
+}
+
+uint8_t op_sub(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a - b;
+
+	return 0;
+}
+
+uint8_t op_mul(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a * b;
+
+	return 0;
+}
+
+uint8_t op_dimd(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	struct value av = vm->stack.values[vm->stack.end-1];
+	struct value bv = vm->stack.values[vm->stack.end-2];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a / b;
+	vm->stack.values[vm->stack.end-21].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-2], int32_t) = a % b;
+
+	return 0;
+}
+
+uint8_t op_lsh(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a << b;
+
+	return 0;
+}
+
+uint8_t op_rsh(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a >> b;
+
+	return 0;
+}
+
+uint8_t op_and(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a & b;
+
+	return 0;
+}
+
+uint8_t op_or(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a | b;
+
+	return 0;
+}
+
+uint8_t op_xor(struct VM* vm)
+{
+	if(vm->stack.end < 2)
+		return ERR_VM_STACK_UNDER;
+
+	vm->stack.end--;
+	struct value av = vm->stack.values[vm->stack.end];
+	struct value bv = vm->stack.values[vm->stack.end-1];
+	int32_t a = value2int(&av);
+	int32_t b = value2int(&bv);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = a ^ b;
+
+	return 0;
+}
+
+uint8_t op_not(struct VM* vm)
+{
+	if(vm->stack.end < 1)
+		return ERR_VM_STACK_UNDER;
+
+	struct value v = vm->stack.values[vm->stack.end-1];
+	int32_t i = value2int(&v);
+
+	vm->stack.values[vm->stack.end-1].type = v_int;
+	*value2type(vm->stack.values[vm->stack.end-1], int32_t) = ~i;
+
+	return 0;
+}
+
 #warning TODO: implement the rest of the opcodes

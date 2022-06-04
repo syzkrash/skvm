@@ -21,4 +21,21 @@ struct value {
 
 #define value2type(v, t) ((t*)&((v).data))
 
+static int32_t value2int(struct value* v)
+{
+	switch(v->type)
+	{
+	case v_byte:
+		return *((uint8_t*)&v->data);
+	case v_ptr:
+		return *((uint16_t*)&v->data);
+	case v_int:
+		return *((int32_t*)&v->data);
+	case v_float:
+		return *((float*)&v->data);
+	default:
+		return -1;
+	}
+}
+
 #endif
