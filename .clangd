@@ -1,0 +1,10 @@
+CompileFlags:
+  Add: [
+    -DDEBUG,
+    -xc,
+    -std=c11,
+    -I../include,
+    -Wall,
+    -Wpedantic,
+    -Wextra,
+  ]
